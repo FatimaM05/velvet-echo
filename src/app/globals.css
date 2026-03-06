@@ -1,26 +1,52 @@
 @import "tailwindcss";
 
+@theme {
+  --color-neon-pink: #ff4ec1;
+  --color-neon-purple: #a14eff;
+  --color-dark-bg: #0b001a;
+  
+  --font-story: var(--font-playfair);
+  --font-input: var(--font-poppins);
+  --font-ui: var(--font-inter);
+}
+
+@utility text-shadow-pink {
+  text-shadow: 0 0 15px rgba(255, 78, 193, 0.8), 0 0 30px rgba(255, 78, 193, 0.4);
+}
+
+@utility text-shadow-purple {
+  text-shadow: 0 0 15px rgba(161, 78, 255, 0.8), 0 0 30px rgba(161, 78, 255, 0.4);
+}
+
+@utility shadow-neon {
+  box-shadow: 0 0 20px rgba(161, 78, 255, 0.4), inset 0 0 15px rgba(255, 78, 193, 0.2);
+}
+
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
-
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+  --background: #0b001a;
+  --foreground: #f0f0f0;
 }
 
 body {
-  background: var(--background);
+  background-color: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  overflow-x: hidden;
+  margin: 0;
+  padding: 0;
+}
+
+/* Custom Scrollbar for the AIStory modal */
+.custom-scrollbar::-webkit-scrollbar {
+  width: 8px;
+}
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 10px;
+}
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background: rgba(161, 78, 255, 0.5);
+  border-radius: 10px;
+}
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 78, 193, 0.8);
 }

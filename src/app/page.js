@@ -1,65 +1,118 @@
-import Image from "next/image";
+"use client";
+
+import { useState } from "react";
+import { AnimatePresence, motion } from "framer-motion";
+import AnimatedBG from "@/components/AnimatedBG";
+import MoodInput from "@/components/MoodInput";
+import AIStory from "@/components/AIStory";
+import Navigation from "@/components/Navigation";
+import { Loader2 } from "lucide-react";
 
 export default function Home() {
+  const [currentMood, setCurrentMood] = useState("");
+  const [story, setStory] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
+
+  // Calls the Next.js API route that handles actual AI generation
+  const handleMoodSubmit = async (mood) => {
+    setCurrentMood(mood);
+    setIsLoading(true);
+    setStory("");
+    
+    try {
+      const res = await fetch("/api/story", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ mood })
+      });
+      
+      const data = await res.json();
+      
+      if (res.ok && data.story) {
+        setStory(data.story);
+      } else {
+        setStory(data.error || "A cosmic interference blocked my message. Please try again.");
+      }
+    } catch (error) {
+      console.error(error);
+      setStory("Something went wrong, but don't worry, the stars are still shining for you. Please try again.");
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const handleReset = () => {
+    setCurrentMood("");
+    setStory("");
+  };
+
+  const handleRegenerate = async () => {
+    if (!currentMood) return;
+    setIsLoading(true);
+    setStory("");
+    
+    try {
+      const res = await fetch("/api/story", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        // Append a minor prompt iteration to ensure a fresh, alternative response
+        body: JSON.stringify({ mood: currentMood + " - please act as if this is the first time I'm telling you this, but give me a fresh, completely different poetic perspective" })
+      });
+      
+      const data = await res.json();
+      if (res.ok && data.story) {
+        setStory(data.story);
+      }
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   return (
-    <div className="flex min-h-screen items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex min-h-screen w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.js file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
+    <main className="relative min-h-screen flex items-center justify-center p-6 sm:p-12 font-ui">
+      <AnimatedBG />
+
+      <div className="w-full z-10 flex flex-col items-center">
+        <AnimatePresence mode="wait">
+          {!story && !isLoading && (
+            <motion.div key="input" className="w-full">
+              <MoodInput onSubmit={handleMoodSubmit} />
+            </motion.div>
+          )}
+
+          {isLoading && (
+            <motion.div
+              key="loading"
+              initial={{ opacity: 0, scale: 0.8 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0, scale: 0.8, filter: "blur(10px)" }}
+              transition={{ duration: 0.5 }}
+              className="flex flex-col items-center gap-6 mt-16"
             >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
-        </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
-        </div>
-      </main>
-    </div>
+              <div className="relative">
+                <Loader2 className="w-20 h-20 text-neon-pink animate-spin" />
+                <div className="absolute inset-0 bg-neon-purple/30 blur-xl rounded-full" />
+              </div>
+              <p className="text-2xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-white to-neon-pink text-shadow-purple animate-pulse text-center">
+                Weaving your feelings into the stars...
+              </p>
+            </motion.div>
+          )}
+
+          {story && !isLoading && (
+            <motion.div key="story" className="w-full flex flex-col items-center gap-8">
+              <AIStory story={story} />
+              <Navigation
+                onReset={handleReset}
+                onRegenerate={handleRegenerate}
+                isLoading={isLoading}
+              />
+            </motion.div>
+          )}
+        </AnimatePresence>
+      </div>
+    </main>
   );
 }
