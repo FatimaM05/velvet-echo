@@ -1,36 +1,87 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# Velvet Echo 🌌
 
-## Getting Started
+Velvet Echo is a serene, interactive storytelling web application designed to be a digital safe haven. Users can type out their current mood, feelings, or emotional state into a calming interface, and an empathetic AI will generate a deeply personalized, poetic, and comforting response. 
 
-First, run the development server:
+Unlike typical conversational agents, Velvet Echo acts as a kind spirit quietly sitting beside you inside a calm digital world—offering warmth, emotional intelligence, and gentle storytelling energy tailored explicitly to how you feel.
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+---
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## ✨ Features
+- **Empathetic AI Storytelling:** Powered by Google's Gemini 2.5 Flash, the application parses emotional nuance to deliver beautifully poetic and validating responses.
+- **Immersive Visuals:** A dynamic, neon-themed glassmorphic UI featuring floating particles and drifting starlight.
+- **Fluid Animations:** Smooth, staggered text reveals and viewport transitions built with Framer Motion.
+- **Rich Typography:** Carefully curated Google Fonts (Playfair Display for stories, Poppins for inputs, Inter for UI) that enhance the reading experience.
+- **Responsive Design:** A fully responsive layout that feels native and comforting on both mobile and desktop screens.
 
-You can start editing the page by modifying `app/page.js`. The page auto-updates as you edit the file.
+---
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## 🛠️ Tech Stack
 
-## Learn More
+### Framework & Core
+- **[Next.js 15 (App Router)](https://nextjs.org/):** React framework for seamless server-side rendering, routing, and optimized builds.
+- **[React 19](https://react.dev/):** UI library for building component-driven interfaces.
+- **Capabilities:** Utilizing Server API Routes to securely communicate with AI models without exposing keys to the client.
 
-To learn more about Next.js, take a look at the following resources:
+### AI & Logic
+- **[@google/generative-ai](https://www.npmjs.com/package/@google/generative-ai):** The official SDK integrating **Gemini 2.5 Flash**. The AI is explicitly prompted to act as a comforting presence, dynamically shifting its tone based on the user's emotional state (sad, angry, happy, etc.) using soft imagery and non-robotic language.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+### Styling & Animation
+- **[Tailwind CSS v4](https://tailwindcss.com/):** Utility-first CSS framework configured with custom variables for our signature neon pink (`#ff4ec1`) and neon purple (`#a14eff`) aesthetic.
+- **[Framer Motion](https://www.framer.com/motion/):** Production-ready animation library powering the background blobs, floating stars, staggered paragraph reveals, and smooth component mounting/unmounting.
+- **[Lucide React](https://lucide.dev/):** Beautiful, consistent iconography used throughout the interface.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+---
 
-## Deploy on Vercel
+## 📖 The Poetry of Velvet Echo
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+When a user shares their feelings, the AI does *not* behave like a chatbot answering a prompt. Instead, it is instructed to respond with deep poetic resonance. 
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+For example, if a user feels overwhelmed, the app might respond:
+> *"I can feel the weight you're carrying right now. It is completely okay to feel this way. The world can sometimes be incredibly loud, asking too much of us all at once.*
+> 
+> *Take a deep breath and just exist in this moment. You don't have to figure everything out right now. Imagine a soft, warm light wrapping around you, keeping you safe from the noise outside."*
+
+The AI is rigorously constrained to avoid robotic tropes, hashtags, or introductory phrases, ensuring the user feels genuinely heard.
+
+---
+
+## 🚀 Getting Started
+
+### Prerequisites
+- Node.js 18.17 or later.
+- A free **Gemini API Key** from [Google AI Studio](https://aistudio.google.com/).
+
+### Installation
+
+1. **Clone the repository:**
+   ```bash
+   git clone https://github.com/FatimaM05/velvet-echo.git
+   cd velvet-echo
+   ```
+
+2. **Install dependencies:**
+   ```bash
+   npm install
+   ```
+
+3. **Set up Environment Variables:**
+   Create a `.env.local` file in the root directory and add your Gemini API Key:
+   ```env
+   GEMINI_API_KEY=your_api_key_here
+   ```
+
+4. **Run the development server:**
+   ```bash
+   npm run dev
+   ```
+
+5. **Open the app:**
+   Navigate to [http://localhost:3000](http://localhost:3000) in your browser.
+
+---
+
+## 🤝 Contributing
+Contributions, issues, and feature requests are always welcome! Feel free to check the [issues page](https://github.com/FatimaM05/velvet-echo/issues).
+
+## 📄 License
+This project is open-source and available under the MIT License.
