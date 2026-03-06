@@ -1,5 +1,11 @@
 # Velvet Echo 🌌
 
+![Next.js](https://img.shields.io/badge/Next.js-15-black?style=flat&logo=next.js)
+![React](https://img.shields.io/badge/React-19-blue?style=flat&logo=react)
+![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-v4-teal?style=flat&logo=tailwind-css)
+![Framer Motion](https://img.shields.io/badge/Framer_Motion-orange?style=flat&logo=framer)
+![Google Gemini](https://img.shields.io/badge/Google_Gemini-2.5_flash-purple?style=flat)
+
 Velvet Echo is a serene, interactive storytelling web application designed to be a digital safe haven. Users can type out their current mood, feelings, or emotional state into a calming interface, and an empathetic AI will generate a deeply personalized, poetic, and comforting response. 
 
 Unlike typical conversational agents, Velvet Echo acts as a kind spirit quietly sitting beside you inside a calm digital world—offering warmth, emotional intelligence, and gentle storytelling energy tailored explicitly to how you feel.
