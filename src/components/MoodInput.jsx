@@ -14,6 +14,15 @@ export default function MoodInput({ onSubmit }) {
     }
   };
 
+  const handleKeyDown = (e) => {
+    if (e.key === "Enter" && !e.shiftKey) {
+      e.preventDefault();
+      if (mood.trim()) {
+        onSubmit(mood);
+      }
+    }
+  };
+
   return (
     <motion.form
       initial={{ opacity: 0, y: 30 }}
@@ -36,10 +45,11 @@ export default function MoodInput({ onSubmit }) {
         <textarea
           value={mood}
           onChange={(e) => setMood(e.target.value)}
+          onKeyDown={handleKeyDown}
           placeholder="I'm feeling a bit overwhelmed and lonely today..."
           className="w-full h-40 px-6 py-5 bg-white/5 border-2 border-neon-purple/50 rounded-3xl 
           focus:outline-none focus:border-neon-pink focus:shadow-neon transition-all resize-none
-          text-white placeholder:text-gray-400/60 backdrop-blur-xl shadow-lg
+          text-white placeholder:text-gray-400/60 backdrop-blur-xl shadow-lg appearance-none
           text-lg font-input font-medium leading-relaxed"
         />
         <motion.button
