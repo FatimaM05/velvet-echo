@@ -72,7 +72,7 @@ export default function Home() {
 
   return (
     <main className="relative min-h-screen flex items-center justify-center p-6 sm:p-12 font-ui">
-      <AnimatedBG />
+      <AnimatedBG mood={currentMood} />
 
       <div className="w-full z-10 flex flex-col items-center">
         <AnimatePresence mode="wait">
