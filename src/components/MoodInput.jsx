@@ -1,70 +1,230 @@
 "use client";
 
-import { useState } from "react";
-import { motion } from "framer-motion";
-import { Send, HeartPulse } from "lucide-react";
+import { useState, useRef, useEffect } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+
+const placeholders = [
+  "I've been carrying something heavy lately, and I don't know where to put it...",
+  "There's a quiet sadness I can't quite name today...",
+  "I feel scattered, like I can't hold a single thought...",
+  "Something feels off but I don't know what it is...",
+  "I've been overthinking everything and it's exhausting...",
+];
 
 export default function MoodInput({ onSubmit }) {
   const [mood, setMood] = useState("");
+  const [isFocused, setIsFocused] = useState(false);
+  const [placeholderIndex, setPlaceholderIndex] = useState(0);
+  const [charCount, setCharCount] = useState(0);
+  const textareaRef = useRef(null);
+  const MAX_CHARS = 500;
+
+  // Rotate placeholder text
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setPlaceholderIndex((i) => (i + 1) % placeholders.length);
+    }, 4000);
+    return () => clearInterval(timer);
+  }, []);
+
+  // Auto-resize textarea
+  useEffect(() => {
+    const ta = textareaRef.current;
+    if (!ta) return;
+    ta.style.height = "auto";
+    ta.style.height = Math.min(ta.scrollHeight, 220) + "px";
+  }, [mood]);
+
+  const handleChange = (e) => {
+    const val = e.target.value;
+    if (val.length <= MAX_CHARS) {
+      setMood(val);
+      setCharCount(val.length);
+    }
+  };
 
   const handleSubmit = (e) => {
-    e.preventDefault();
-    if (mood.trim()) {
-      onSubmit(mood);
-    }
+    e?.preventDefault();
+    if (mood.trim().length > 0) onSubmit(mood.trim());
   };
 
   const handleKeyDown = (e) => {
     if (e.key === "Enter" && !e.shiftKey) {
       e.preventDefault();
-      if (mood.trim()) {
-        onSubmit(mood);
-      }
+      handleSubmit();
     }
   };
 
+  const canSubmit = mood.trim().length > 0;
+
   return (
-    <motion.form
-      initial={{ opacity: 0, y: 30 }}
+    <motion.div
+      initial={{ opacity: 0, y: 40 }}
       animate={{ opacity: 1, y: 0 }}
-      exit={{ opacity: 0, y: -30 }}
-      transition={{ duration: 0.8, ease: "easeOut" }}
-      onSubmit={handleSubmit}
-      className="w-full max-w-lg mx-auto flex flex-col items-center gap-6"
+      exit={{ opacity: 0, y: -30, filter: "blur(12px)" }}
+      transition={{ duration: 0.9, ease: [0.22, 1, 0.36, 1] }}
+      className="w-full max-w-xl mx-auto flex flex-col items-center gap-8"
     >
+      {/* ── Header ── */}
       <div className="flex flex-col items-center text-center gap-4">
-        <HeartPulse className="w-16 h-16 text-neon-pink animate-pulse drop-shadow-[0_0_15px_rgba(255,78,193,0.8)]" />
-        <h2 className="text-4xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-neon-pink to-neon-purple text-shadow-pink leading-tight">
-          How are you feeling right now?
-        </h2>
-        <p>Sit for a moment. Let your thoughts rest among quiet stars.</p>
-        <p className="text-gray-200 text-lg font-medium">Don't hold back. Just type it out.</p>
+        {/* Logo mark */}
+        <motion.div
+          initial={{ scale: 0, opacity: 0 }}
+          animate={{ scale: 1, opacity: 1 }}
+          transition={{ delay: 0.2, duration: 0.7, type: "spring", stiffness: 120 }}
+          className="relative"
+        >
+          <div className="w-16 h-16 rounded-2xl glass-card flex items-center justify-center shadow-glow-purple">
+            <svg width="32" height="32" viewBox="0 0 32 32" fill="none">
+              <path
+                d="M16 4C16 4 6 10 6 18C6 22.4 10.8 26 16 26C21.2 26 26 22.4 26 18C26 10 16 4 16 4Z"
+                fill="url(#ve-grad)"
+                opacity="0.9"
+              />
+              <path
+                d="M16 10C16 10 11 13.5 11 18C11 20.2 13.2 22 16 22C18.8 22 21 20.2 21 18C21 13.5 16 10 16 10Z"
+                fill="white"
+                opacity="0.25"
+              />
+              <defs>
+                <linearGradient id="ve-grad" x1="6" y1="4" x2="26" y2="26" gradientUnits="userSpaceOnUse">
+                  <stop stopColor="#c084fc" />
+                  <stop offset="1" stopColor="#ff4ec1" />
+                </linearGradient>
+              </defs>
+            </svg>
+          </div>
+          <div className="absolute inset-0 rounded-2xl glow-ring"
+            style={{ boxShadow: "0 0 30px rgba(161,78,255,0.4)" }}
+          />
+        </motion.div>
+
+        <motion.div
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.35, duration: 0.7 }}
+        >
+          <h1 className="text-5xl sm:text-6xl font-light tracking-tight gradient-text mb-1"
+              style={{ fontFamily: "'Playfair Display', serif" }}>
+            Velvet Echo
+          </h1>
+          <p className="text-sm tracking-[0.25em] text-white/30 uppercase font-light">
+            Emotional Intelligence
+          </p>
+        </motion.div>
+
+        <motion.p
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 0.5, duration: 0.8 }}
+          className="text-white/50 text-base font-light leading-relaxed max-w-xs"
+        >
+          A quiet space to be heard. Tell me what you're carrying.
+        </motion.p>
       </div>
 
-      <div className="relative w-full group">
-        <textarea
-          value={mood}
-          onChange={(e) => setMood(e.target.value)}
-          onKeyDown={handleKeyDown}
-          placeholder="I'm feeling a bit overwhelmed and lonely today..."
-          className="w-full h-40 px-6 py-5 bg-white/5 border-2 border-neon-purple/50 rounded-3xl 
-          focus:outline-none focus:border-neon-pink focus:shadow-neon transition-all resize-none
-          text-white placeholder:text-gray-400/60 backdrop-blur-xl shadow-lg appearance-none
-          text-lg font-input font-medium leading-relaxed"
-        />
-        <motion.button
-          whileHover={{ scale: 1.05 }}
-          whileTap={{ scale: 0.95 }}
-          type="submit"
-          disabled={!mood.trim()}
-          className="absolute right-4 bottom-4 p-4 bg-gradient-to-br from-neon-pink to-neon-purple 
-          rounded-2xl text-white font-semibold disabled:opacity-50 disabled:cursor-not-allowed
-          shadow-[0_0_20px_rgba(255,78,193,0.5)] hover:shadow-[0_0_30px_rgba(255,78,193,0.9)] 
-          transition-all duration-300 group-focus-within:animate-pulse"
+      {/* ── Input card ── */}
+      <motion.form
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.6, duration: 0.7 }}
+        onSubmit={handleSubmit}
+        className="w-full"
+      >
+        <div
+          className="relative rounded-3xl transition-all duration-500"
+          style={{
+            background: isFocused
+              ? "rgba(255,255,255,0.06)"
+              : "rgba(255,255,255,0.03)",
+            border: isFocused
+              ? "1px solid rgba(161,78,255,0.5)"
+              : "1px solid rgba(255,255,255,0.08)",
+            boxShadow: isFocused
+              ? "0 0 0 4px rgba(161,78,255,0.08), 0 20px 60px rgba(0,0,0,0.4)"
+              : "0 8px 32px rgba(0,0,0,0.3)",
+            backdropFilter: "blur(24px)",
+          }}
         >
-          <Send className="w-6 h-6" />
-        </motion.button>
-      </div>
-    </motion.form>
+          {/* Animated placeholder */}
+          <AnimatePresence mode="wait">
+            {!mood && !isFocused && (
+              <motion.p
+                key={placeholderIndex}
+                initial={{ opacity: 0, y: 4 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -4 }}
+                transition={{ duration: 0.5 }}
+                className="absolute top-5 left-6 right-16 text-white/25 text-base leading-relaxed font-light pointer-events-none select-none"
+              >
+                {placeholders[placeholderIndex]}
+              </motion.p>
+            )}
+          </AnimatePresence>
+
+          <textarea
+            ref={textareaRef}
+            id="mood-input"
+            value={mood}
+            onChange={handleChange}
+            onKeyDown={handleKeyDown}
+            onFocus={() => setIsFocused(true)}
+            onBlur={() => setIsFocused(false)}
+            className="w-full px-6 pt-5 pb-14 bg-transparent resize-none focus:outline-none
+              text-white text-base leading-relaxed font-light tracking-wide
+              min-h-[120px] max-h-[220px] overflow-y-auto"
+            style={{ caretColor: "rgba(161,78,255,0.9)" }}
+          />
+
+          {/* Bottom bar */}
+          <div className="absolute bottom-0 left-0 right-0 flex items-center justify-between px-5 py-3
+            border-t border-white/[0.05]">
+            <span className={`text-xs font-light transition-colors ${
+              charCount > MAX_CHARS * 0.85 ? "text-rose-400/70" : "text-white/20"
+            }`}>
+              {charCount}/{MAX_CHARS}
+            </span>
+
+            <div className="flex items-center gap-3">
+              <span className="text-white/20 text-xs hidden sm:block">Shift+Enter for new line</span>
+              <motion.button
+                id="submit-mood-btn"
+                type="submit"
+                disabled={!canSubmit}
+                whileHover={canSubmit ? { scale: 1.04 } : {}}
+                whileTap={canSubmit ? { scale: 0.96 } : {}}
+                className="flex items-center gap-2 px-5 py-2.5 rounded-2xl text-sm font-medium
+                  transition-all duration-300 disabled:opacity-30 disabled:cursor-not-allowed"
+                style={{
+                  background: canSubmit
+                    ? "linear-gradient(135deg, rgba(161,78,255,0.8), rgba(255,78,193,0.8))"
+                    : "rgba(255,255,255,0.08)",
+                  boxShadow: canSubmit
+                    ? "0 0 20px rgba(161,78,255,0.3), 0 4px 12px rgba(0,0,0,0.3)"
+                    : "none",
+                  backdropFilter: "blur(8px)",
+                }}
+              >
+                <span>Reflect</span>
+                <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+                  <path d="M2 7h10M8 3l4 4-4 4" stroke="currentColor" strokeWidth="1.5"
+                    strokeLinecap="round" strokeLinejoin="round" />
+                </svg>
+              </motion.button>
+            </div>
+          </div>
+        </div>
+      </motion.form>
+
+      {/* ── Footer hint ── */}
+      <motion.p
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ delay: 1, duration: 1 }}
+        className="text-white/20 text-xs text-center tracking-wide"
+      >
+        Your words are held with care. No storage, no judgment.
+      </motion.p>
+    </motion.div>
   );
 }
