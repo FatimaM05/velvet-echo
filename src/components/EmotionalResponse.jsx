@@ -65,9 +65,8 @@ const SECTIONS = [
 function EmotionPill({ label, dimmed = false }) {
   return (
     <span
-      className={`px-3 py-1 rounded-full text-xs font-medium tracking-wide transition-all ${
-        dimmed ? "text-white/35" : "text-white/70"
-      }`}
+      className={`px-3 py-1 rounded-full text-xs font-medium tracking-wide transition-all ${dimmed ? "text-white/35" : "text-white/70"
+        }`}
       style={{
         background: dimmed ? "rgba(255,255,255,0.04)" : "rgba(255,255,255,0.08)",
         border: `1px solid ${dimmed ? "rgba(255,255,255,0.06)" : "rgba(255,255,255,0.12)"}`,
