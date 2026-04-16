@@ -74,25 +74,18 @@ export default function MoodInput({ onSubmit }) {
           transition={{ delay: 0.2, duration: 0.7, type: "spring", stiffness: 120 }}
           className="relative"
         >
-          <div className="w-16 h-16 rounded-2xl glass-card flex items-center justify-center shadow-glow-purple">
-            <svg width="32" height="32" viewBox="0 0 32 32" fill="none">
-              <path
-                d="M16 4C16 4 6 10 6 18C6 22.4 10.8 26 16 26C21.2 26 26 22.4 26 18C26 10 16 4 16 4Z"
-                fill="url(#ve-grad)"
-                opacity="0.9"
-              />
-              <path
-                d="M16 10C16 10 11 13.5 11 18C11 20.2 13.2 22 16 22C18.8 22 21 20.2 21 18C21 13.5 16 10 16 10Z"
-                fill="white"
-                opacity="0.25"
-              />
-              <defs>
-                <linearGradient id="ve-grad" x1="6" y1="4" x2="26" y2="26" gradientUnits="userSpaceOnUse">
-                  <stop stopColor="#c084fc" />
-                  <stop offset="1" stopColor="#ff4ec1" />
-                </linearGradient>
-              </defs>
-            </svg>
+          <div
+            className="w-16 h-16 rounded-2xl glass-card flex items-center justify-center shadow-glow-purple"
+            style={{ perspective: "800px" }}
+          >
+            <motion.img
+              src="/favicon.ico"
+              alt="Velvet Echo Logo"
+              className="w-10 h-10 object-contain drop-shadow-[0_0_12px_rgba(255,255,255,0.4)]"
+
+              transition={{ repeat: Infinity, duration: 8, ease: "linear" }}
+              style={{ transformStyle: "preserve-3d" }}
+            />
           </div>
           <div className="absolute inset-0 rounded-2xl glow-ring"
             style={{ boxShadow: "0 0 30px rgba(161,78,255,0.4)" }}
@@ -105,7 +98,7 @@ export default function MoodInput({ onSubmit }) {
           transition={{ delay: 0.35, duration: 0.7 }}
         >
           <h1 className="text-5xl sm:text-6xl font-light tracking-tight gradient-text mb-1"
-              style={{ fontFamily: "'Playfair Display', serif" }}>
+            style={{ fontFamily: "'Playfair Display', serif" }}>
             Velvet Echo
           </h1>
           <p className="text-sm tracking-[0.25em] text-white/30 uppercase font-light">
@@ -179,9 +172,8 @@ export default function MoodInput({ onSubmit }) {
           {/* Bottom bar */}
           <div className="absolute bottom-0 left-0 right-0 flex items-center justify-between px-5 py-3
             border-t border-white/[0.05]">
-            <span className={`text-xs font-light transition-colors ${
-              charCount > MAX_CHARS * 0.85 ? "text-rose-400/70" : "text-white/20"
-            }`}>
+            <span className={`text-xs font-light transition-colors ${charCount > MAX_CHARS * 0.85 ? "text-rose-400/70" : "text-white/20"
+              }`}>
               {charCount}/{MAX_CHARS}
             </span>
 
